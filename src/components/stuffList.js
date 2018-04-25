@@ -16,8 +16,8 @@ class stuffList extends React.Component {
        super(props);
        this.state = {
           dates: {
-            start: "",
-            end: ""
+            start: new Date(2018, 3, 10),
+            end: new Date(2018, 3, 15)
           }
        }
        this.filterByDate = this.filterByDate.bind(this);
@@ -32,7 +32,7 @@ class stuffList extends React.Component {
 
     renderData(item) {
         return <div style={{display:"flex"}} key={item.id}>
-                    <div style={{flex: "1", marginTop: "40px"}}><label>{item.name}</label></div>
+                    <div onClick={() => window.open(item.url, '_target')} style={{flex: "1", marginTop: "40px"}}><label>{item.name}</label></div>
                     <div><img width="100px" height="100px" src={item.images[2].url} /> </div>
                 </div>;
     }
@@ -46,16 +46,20 @@ class stuffList extends React.Component {
             )
         }else{
           let data = this.props.stuff._embedded ? this.props.stuff._embedded.events : [];
+          let height = window.innerHeight - 50,
+              width = window.innerWidth/2 - 20;
             return (
-                <div className="" style={{display:"flex",width:"100%"}}>
-                    <div style={{flex:"1"}}>{
+              <div>
+                <div className="" style={{display:"flex",width:"100%",  height }}>
+                    <div style={{flex:"1", height: "96%", overflow: "auto", margin: "5px"}}>{
                         data.map((item, index) => {
                             return (
                                 this.renderData(item)
                             );
                         })
                     }</div>
-                    <div style={{flex:"1"}}>
+                    <div style={{//flex:"1",
+                    height: "96%", overflow: "hidden",}}>
                       <InfiniteCalendar
                         Component={CalendarWithRange}
                         selected={this.state.dates}
@@ -66,12 +70,19 @@ class stuffList extends React.Component {
                         locale={{
                           headerFormat: 'MMM Do',
                         }}
-                        onSelect={(d) => {this.setState({dates : {start: d.start, end: d.end}}); debugger }}
+                        onSelect={(d) => {this.setState({dates : {start: d.start, end: d.end}}); }}
                       />
                   </div>
-                  <div style={{flex:"1"}}><button onClick={this.filterByDate}>Filter events</button>
-                  </div>
                 </div>
+
+                <div style={{
+                        height: "25px", color: "white",maxWidth: "100px",
+                        backgroundColor: "deepskyblue",paddingTop: "5px",
+                        textAlign: "center",marginLeft: width
+                      }}
+                      onClick={this.filterByDate}>Filter events
+                </div>
+              </div>
             )
         }
     }
