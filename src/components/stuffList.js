@@ -31,10 +31,16 @@ class stuffList extends React.Component {
     }
 
     renderData(item) {
+      let sDate = new Date(item.sales.public.startDateTime),
+          eDate = new Date(item.sales.public.endDateTime);
+      let displaysDate = sDate.getFullYear() + "-" + sDate.getMonth() + "-" + sDate.getDate(),
+          displayeDate = eDate.getFullYear() + "-" + eDate.getMonth() + "-" + eDate.getDate();
+
         return <div style={{display:"flex", border: "2px solid #5d5df194",borderBottom: "none"}} key={item.id}>
                     <div style={{flex: "1", marginTop: "40px"}}>
                       <label style={{padding: "43px"}}>{item.name}</label>
-                      </div>
+                      <div style={{position: "absolute"}}>Tickets publically available from {displaysDate} to {displayeDate}</div>
+                    </div>
                     <div style={{borderLeft: "2px solid #5d5df194"}}>
                       <img style={{padding: "2px", "cursor":"pointer"}} onClick={() => window.open(item.url, '_target')}
                         width="100px" height="100px" src={item.images[2].url} />
