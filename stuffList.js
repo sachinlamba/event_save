@@ -12,6 +12,17 @@ import 'react-infinite-calendar/styles.css';
 const CalendarWithRange = withRange(Calendar);
 
 class stuffList extends React.Component {
+    constructor(props) {
+       super(props);
+
+       this.state = {
+          dates: {
+            start: "",
+            end: ""
+          }
+       }
+    }
+
     componentWillMount() {
         this.props.stuffActions.fetchStuff();
     }
@@ -41,13 +52,15 @@ class stuffList extends React.Component {
                     <div style={{flex:"1"}}>
                       <InfiniteCalendar
                         Component={CalendarWithRange}
-                        selected={{
-                          start: new Date(2017, 1, 10),
-                          end: new Date(2017, 1, 18),
-                        }}
+                        selected={this.state.dates}
+                        // {{
+                        //   start: new Date(2017, 1, 10),
+                        //   end: new Date(2017, 1, 18),
+                        // }}
                         locale={{
                           headerFormat: 'MMM Do',
                         }}
+                        onDateChange={(d) => this.setState({dates : {start: d.start, end: d.end}})}
                       />
                   </div>
                 </div>
