@@ -14,23 +14,26 @@ const CalendarWithRange = withRange(Calendar);
 class stuffList extends React.Component {
     constructor(props) {
        super(props);
-
        this.state = {
           dates: {
             start: "",
             end: ""
           }
        }
+       this.filterByDate = this.filterByDate.bind(this);
     }
 
     componentWillMount() {
         this.props.stuffActions.fetchStuff();
     }
+    filterByDate(){
+      this.props.stuffActions.fetchStuff(this.state.dates.start, this.state.dates.end);
+    }
 
     renderData(item) {
         return <div style={{display:"flex"}} key={item.id}>
-                    <div style={{"flex":"1"}}><label>{item.name}</label></div>
-                    <div style={{"flex":"1"}}><img width="100px" height="100px" src={item.images[2].url} /> </div>
+                    <div style={{flex: "1", marginTop: "40px"}}><label>{item.name}</label></div>
+                    <div><img width="100px" height="100px" src={item.images[2].url} /> </div>
                 </div>;
     }
 
@@ -63,8 +66,10 @@ class stuffList extends React.Component {
                         locale={{
                           headerFormat: 'MMM Do',
                         }}
-                        onDateChange={(d) => this.setState({dates : {start: d.start, end: d.end}})}
+                        onSelect={(d) => {this.setState({dates : {start: d.start, end: d.end}}); debugger }}
                       />
+                  </div>
+                  <div style={{flex:"1"}}><button onClick={this.filterByDate}>Filter events</button>
                   </div>
                 </div>
             )

@@ -3,10 +3,28 @@ import * as allActions from './allActions';
 export function receiveStuff(data) {
     return {type: allActions.RECEIVE_STUFF, stuff: data};
 }
+export function formattedDate(d) {
+  let month = String(d.getMonth() + 1);
+  let day = String(d.getDate());
+  const year = String(d.getFullYear());
 
-export function fetchStuff() {
+  if (month.length < 2) month = '0' + month;
+  if (day.length < 2) day = '0' + day;
+
+  return `${year}-${month}-${day}`;
+}
+export function fetchStuff(startDate, endDate) {
+  let sDate = formattedDate(new Date());
+  if(startDate && startDate != ""){
+    sDate = formattedDate(startDate)
+  }
+  let url = 'https://app.ticketmaster.com/discovery/v2/events.json?apikey=ajp0wkSehryzWQo24JvhNAuCF6RX2wyN&startDateTime='+sDate+'T00:00:00Z';
+  if(endDate && endDate != ""){
+    let eDate = formattedDate(endDate)
+    url += '&EndDateTime='+eDate+'T00:00:00Z';
+  }
     return (dispatch) => {
-        fetch('https://app.ticketmaster.com/discovery/v2/events.json?apikey=ajp0wkSehryzWQo24JvhNAuCF6RX2wyN&startDateTime=2017-12-04T00:00:00Z')
+        fetch(url)
             .then(response =>
                 response.json().then(data => ({
                     data: data,
