@@ -31,9 +31,14 @@ class stuffList extends React.Component {
     }
 
     renderData(item) {
-        return <div style={{display:"flex"}} key={item.id}>
-                    <div onClick={() => window.open(item.url, '_target')} style={{flex: "1", marginTop: "40px"}}><label>{item.name}</label></div>
-                    <div><img width="100px" height="100px" src={item.images[2].url} /> </div>
+        return <div style={{display:"flex", border: "2px solid #5d5df194",borderBottom: "none"}} key={item.id}>
+                    <div style={{flex: "1", marginTop: "40px"}}>
+                      <label style={{padding: "43px"}}>{item.name}</label>
+                      </div>
+                    <div style={{borderLeft: "2px solid #5d5df194"}}>
+                      <img style={{padding: "2px", "cursor":"pointer"}} onClick={() => window.open(item.url, '_target')}
+                        width="100px" height="100px" src={item.images[2].url} />
+                    </div>
                 </div>;
     }
 
@@ -78,7 +83,7 @@ class stuffList extends React.Component {
                 <div style={{
                         height: "25px", color: "white",maxWidth: "100px",
                         backgroundColor: "deepskyblue",paddingTop: "5px",
-                        textAlign: "center",marginLeft: width
+                        textAlign: "center",marginLeft: width,"cursor":"pointer"
                       }}
                       onClick={this.filterByDate}>Filter events
                 </div>
