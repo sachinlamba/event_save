@@ -8,13 +8,12 @@ import registerServiceWorker from './registerServiceWorker';
 ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();
 */
-
-
 import React from 'react';
 import { Provider } from 'react-redux';
 import { render } from 'react-dom';
 import configureStore from './store/configureStore';
 import App from './App';
+import registerServiceWorker from './registerServiceWorker';
 
 const store = configureStore();
 
@@ -24,3 +23,4 @@ render(
   </Provider>,
   document.getElementById('root')
 );
+registerServiceWorker();
