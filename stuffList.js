@@ -28,7 +28,10 @@ class stuffList extends React.Component {
     }
 
     renderData(item) {
-        return <div key={item.id}>{item.name}</div>;
+        return <div style={{display:"flex"}} key={item.id}>
+                    <div style={{"flex":"1"}}><label>{item.name}</label></div>
+                    <div style={{"flex":"1"}}><img width="100px" height="100px" src={item.images[2].url} /> </div>
+                </div>;
     }
 
     render() {
