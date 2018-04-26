@@ -104,12 +104,13 @@ class stuffList extends React.Component {
           let data = this.props.stuff._embedded ? this.props.stuff._embedded.events : [];
           let height = window.innerHeight - 50,
               width = window.innerWidth/2 - 20,
-             width1 = window.innerWidth/3
+             width1 = window.innerWidth/3,
+             width2 = window.innerWidth - 120;
           if(this.state.pageLevel === 0){
             return <div>
-                        <div>Start</div>
-                        <div style={{marginLeft: width}} className="filter-button" onClick={this.moveToNextPage}>
-                          Want to go with Family or Friends
+                        <div>Want to go with Family or Friends</div>
+                        <div style={{marginLeft: width2}} className="filter-button" onClick={this.moveToNextPage}>
+                          Next Page
                         </div>
                     </div>
 
@@ -137,8 +138,17 @@ class stuffList extends React.Component {
                 </div>
                 <div style={{display: "inline-block"}} className="filter-button" onClick={this.moveToPreviousPage}>Previous Page</div>
                 <div style={{marginLeft: width1, display: "inline-block"}} className="filter-button" onClick={this.filterByDate}>Filter events</div>
+                <div style={{display: "inline-block", marginLeft: width1}} className="filter-button" onClick={this.moveToNextPage}>Next Page</div>
               </div>
             )
+          }else if(this.state.pageLevel === 2){
+            return <div>
+                        <div>want to mail saved event calender?</div>
+                        <div className="filter-button" onClick={this.moveToPreviousPage}>
+                          Previous Page
+                        </div>
+                    </div>
+
           }
         }
     }
