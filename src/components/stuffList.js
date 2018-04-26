@@ -20,15 +20,15 @@ class stuffList extends React.Component {
           pageLevel: 0,
           savedEvents: [],
           dates: {
-            start: new Date(2018, 3, 10),
-            end: new Date(2018, 3, 15)
+            start: new Date(2018, 3, 30),
+            end: new Date(2018, 4, 2)
           }
        }
        this.filterByDate = this.filterByDate.bind(this);
     }
 
     componentWillMount() {
-        this.props.stuffActions.fetchStuff();
+        this.props.stuffActions.fetchStuff(this.state.dates.start, this.state.dates.end);
     }
     filterByDate(){
       this.props.stuffActions.fetchStuff(this.state.dates.start, this.state.dates.end);
@@ -44,22 +44,30 @@ class stuffList extends React.Component {
 
     renderData(item) {
       let sDate = new Date(item.sales.public.startDateTime),
-          eDate = new Date(item.sales.public.endDateTime);
+          eDate = new Date(item.sales.public.endDateTime),
+          todayDate = new Date();
       let displaysDate = sDate.getFullYear() + "-" + sDate.getMonth() + "-" + sDate.getDate(),
           displayeDate = eDate.getFullYear() + "-" + eDate.getMonth() + "-" + eDate.getDate();
       let left = window.innerWidth/3;
-      let buttonCheck = "button-enable";
+      let buttonBuy;
+        if(sDate > todayDate){
+          buttonBuy = "sales-not-start";
+        }else if(eDate > todayDate){
+          buttonBuy = "sales-start";
+        }else{
+          buttonBuy = "sales-end";
+        }
         return <div className="events-box" key={item.id}>
                     <div className="event-details">
                       <div className="event-name">
-                        <label style={{padding: "43px"}}>{item.name}}</label>
+                        <label style={{padding: "43px"}}>{item.name}</label>
                       </div>
                       <div className="button-space">
-                        <div className={"button " + buttonCheck} onClick={() => window.open(item.url, '_target')}>Buy</div>
+                        <div className={"button " + buttonBuy} onClick={() => window.open(item.url, '_target')}>Buy</div>
                         {this.state.savedEvents.indexOf(item.id) > -1 ?
                           <div className="button" onClick={this.removeFromEvents.bind(this, item)}>Remove</div>
                         :
-                          <div className="button" onClick={this.addToEvents.bind(this, item)}>Save</div>
+                          <div className="button event-adder" onClick={this.addToEvents.bind(this, item)}>Save</div>
                         }
                       </div>
                       <div className="event-image">
