@@ -1,0 +1,56 @@
+.button{
+  border: 1px solid black;
+  border-radius: 15px;
+  min-width: 80px;
+  max-width: 150px;
+  height: 30px;
+  margin: 1px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 22px;
+}
+.button-enable{
+  color: white;
+  background-color: lightblue;
+    border: 1px solid lightblue;
+}
+.events-box{
+  border-top: 2px solid rgba(93, 93, 241, 0.58);
+  border-right: 2px solid rgba(93, 93, 241, 0.58);
+  border-bottom: none;
+  border-left: 2px solid rgba(93, 93, 241, 0.58);
+  border-image: initial;
+}
+.event-details{
+  display: flex;
+}
+.event-name{
+  flex: 1 1 0%;
+  margin-top: 40px;
+}
+.button-space{
+  display: flex;
+  flex-direction: column;
+}
+.event-image{
+  border-left: 2px solid rgba(93, 93, 241, 0.58);
+}
+.event-small-image{
+  width: 100px;
+  height: 100px;
+  padding: 2px;
+
+}
+.filter-button{
+  height: 25px;
+  color: white;
+  max-width: 100px;
+  background-color: deepskyblue;
+  padding-top: 5px;
+  text-align: center;
+  cursor: pointer;
+}
+.event-address{
+  cursor: pointer;
+  color: blue;
+}
