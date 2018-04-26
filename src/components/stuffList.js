@@ -1,6 +1,7 @@
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as stuffActions from '../actions/stuffActions';
+import '../styles/stuff.css';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {render} from 'react-dom';
@@ -15,6 +16,9 @@ class stuffList extends React.Component {
     constructor(props) {
        super(props);
        this.state = {
+          pages: ["start", "viewEvent", "newEvent", "save"],
+          pageLevel: 0,
+          savedEvents: [],
           dates: {
             start: new Date(2018, 3, 10),
             end: new Date(2018, 3, 15)
@@ -29,22 +33,48 @@ class stuffList extends React.Component {
     filterByDate(){
       this.props.stuffActions.fetchStuff(this.state.dates.start, this.state.dates.end);
     }
+    addToEvents(event){
+      let add = this.state.savedEvents;
+      add.push(event.id);
+      this.setState({savedEvents: add})
+    }
+    removeFromEvents(event){
+
+    }
 
     renderData(item) {
       let sDate = new Date(item.sales.public.startDateTime),
           eDate = new Date(item.sales.public.endDateTime);
       let displaysDate = sDate.getFullYear() + "-" + sDate.getMonth() + "-" + sDate.getDate(),
           displayeDate = eDate.getFullYear() + "-" + eDate.getMonth() + "-" + eDate.getDate();
-
-        return <div style={{display:"flex", border: "2px solid #5d5df194",borderBottom: "none"}} key={item.id}>
-                    <div style={{flex: "1", marginTop: "40px"}}>
-                      <label style={{padding: "43px"}}>{item.name}</label>
-                      <div style={{position: "absolute"}}>Tickets publically available from {displaysDate} to {displayeDate}</div>
+      let left = window.innerWidth/3;
+      let buttonCheck = "button-enable";
+        return <div className="events-box" key={item.id}>
+                    <div className="event-details">
+                      <div className="event-name">
+                        <label style={{padding: "43px"}}>{item.name}}</label>
+                      </div>
+                      <div className="button-space">
+                        <div className={"button " + buttonCheck} onClick={() => window.open(item.url, '_target')}>Buy</div>
+                        {this.state.savedEvents.indexOf(item.id) > -1 ?
+                          <div className="button" onClick={this.removeFromEvents.bind(this, item)}>Remove</div>
+                        :
+                          <div className="button" onClick={this.addToEvents.bind(this, item)}>Save</div>
+                        }
+                      </div>
+                      <div className="event-image">
+                        <img className="event-small-image" src={item.images[2].url} />
+                      </div>
                     </div>
-                    <div style={{borderLeft: "2px solid #5d5df194"}}>
-                      <img style={{padding: "2px", "cursor":"pointer"}} onClick={() => window.open(item.url, '_target')}
-                        width="100px" height="100px" src={item.images[2].url} />
-                    </div>
+                    <div className="event-venue" style={{marginLeft: left}}>Venue :
+                              <label onClick={()=>window.open(item._embedded.venues[0].url, '_target')}
+                                 className="event-address">{"  " + item._embedded.venues[0].name}</label>
+                                                    </div>
+                                                    {/* {item._embedded.venues[0].address.line1 + " > " +
+                                                    item._embedded.venues[0].city.name + " > " +
+                                                    item._embedded.venues[0].state.name + " > " +
+                                                    item._embedded.venues[0].country.countryCode} */}
+                    {/* <div style={{position: "absolute"}}>Tickets publically available from {displaysDate} to {displayeDate}</div> */}
                 </div>;
     }
 
@@ -69,8 +99,7 @@ class stuffList extends React.Component {
                             );
                         })
                     }</div>
-                    <div style={{//flex:"1",
-                    height: "96%", overflow: "hidden",}}>
+                    <div style={{height: "96%", overflow: "hidden",}}>
                       <InfiniteCalendar
                         Component={CalendarWithRange}
                         selected={this.state.dates}
@@ -86,12 +115,7 @@ class stuffList extends React.Component {
                   </div>
                 </div>
 
-                <div style={{
-                        height: "25px", color: "white",maxWidth: "100px",
-                        backgroundColor: "deepskyblue",paddingTop: "5px",
-                        textAlign: "center",marginLeft: width,"cursor":"pointer"
-                      }}
-                      onClick={this.filterByDate}>Filter events
+                <div style={{marginLeft: width}} className="filter-button" onClick={this.filterByDate}>Filter events
                 </div>
               </div>
             )
