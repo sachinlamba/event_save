@@ -25,8 +25,15 @@ class stuffList extends React.Component {
           }
        }
        this.filterByDate = this.filterByDate.bind(this);
+       this.moveToNextPage = this.moveToNextPage.bind(this);
+       this.moveToPreviousPage = this.moveToPreviousPage.bind(this);
     }
-
+    moveToNextPage(){
+      this.setState({pageLevel: this.state.pageLevel+1});
+    }
+    moveToPreviousPage(){
+      this.setState({pageLevel: this.state.pageLevel-1});
+    }
     componentWillMount() {
         this.props.stuffActions.fetchStuff(this.state.dates.start, this.state.dates.end);
     }
@@ -46,8 +53,8 @@ class stuffList extends React.Component {
       let sDate = new Date(item.sales.public.startDateTime),
           eDate = new Date(item.sales.public.endDateTime),
           todayDate = new Date();
-      let displaysDate = sDate.getFullYear() + "-" + sDate.getMonth() + "-" + sDate.getDate(),
-          displayeDate = eDate.getFullYear() + "-" + eDate.getMonth() + "-" + eDate.getDate();
+      // let displaysDate = sDate.getFullYear() + "-" + sDate.getMonth() + "-" + sDate.getDate(),
+      //     displayeDate = eDate.getFullYear() + "-" + eDate.getMonth() + "-" + eDate.getDate();
       let left = window.innerWidth/3;
       let buttonBuy;
         if(sDate > todayDate){
@@ -71,7 +78,7 @@ class stuffList extends React.Component {
                         }
                       </div>
                       <div className="event-image">
-                        <img className="event-small-image" src={item.images[2].url} />
+                        <img className="event-small-image" alt={item.name} src={item.images[2].url} />
                       </div>
                     </div>
                     <div className="event-venue" style={{marginLeft: left}}>Venue :
@@ -89,14 +96,24 @@ class stuffList extends React.Component {
     render() {
         if(!this.props.stuff){
             return (
-                <div>
+                <div style={{marginTop: "18%", marginLeft: "50%"}}>
                     Loading Stuff...
                 </div>
             )
         }else{
           let data = this.props.stuff._embedded ? this.props.stuff._embedded.events : [];
           let height = window.innerHeight - 50,
-              width = window.innerWidth/2 - 20;
+              width = window.innerWidth/2 - 20,
+             width1 = window.innerWidth/3
+          if(this.state.pageLevel === 0){
+            return <div>
+                        <div>Start</div>
+                        <div style={{marginLeft: width}} className="filter-button" onClick={this.moveToNextPage}>
+                          Want to go with Family or Friends
+                        </div>
+                    </div>
+
+          }else if(this.state.pageLevel === 1){
             return (
               <div>
                 <div className="" style={{display:"flex",width:"100%",  height }}>
@@ -111,10 +128,6 @@ class stuffList extends React.Component {
                       <InfiniteCalendar
                         Component={CalendarWithRange}
                         selected={this.state.dates}
-                        // {{
-                        //   start: new Date(2017, 1, 10),
-                        //   end: new Date(2017, 1, 18),
-                        // }}
                         locale={{
                           headerFormat: 'MMM Do',
                         }}
@@ -122,11 +135,11 @@ class stuffList extends React.Component {
                       />
                   </div>
                 </div>
-
-                <div style={{marginLeft: width}} className="filter-button" onClick={this.filterByDate}>Filter events
-                </div>
+                <div style={{display: "inline-block"}} className="filter-button" onClick={this.moveToPreviousPage}>Previous Page</div>
+                <div style={{marginLeft: width1, display: "inline-block"}} className="filter-button" onClick={this.filterByDate}>Filter events</div>
               </div>
             )
+          }
         }
     }
 }
