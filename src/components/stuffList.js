@@ -12,7 +12,7 @@ import InfiniteCalendar, {
 import 'react-infinite-calendar/styles.css';
 // import * as ICS from 'ics-js';
 import AddToCalendar from 'react-add-to-calendar';
-import '../styles/atc-style-glow-orange.css';
+//import '../styles/atc-style-glow-orange.css';
 const CalendarWithRange = withRange(Calendar);
 
 class stuffList extends React.Component {
