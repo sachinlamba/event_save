@@ -45,6 +45,7 @@
   color: white;
   max-width: 100px;
   background-color: deepskyblue;
+  border: 1px solid deepskyblue;
   padding-top: 5px;
   text-align: center;
   cursor: pointer;
@@ -64,6 +65,10 @@
   background-color: yellow;
   border: 1px solid yellow;
   color: red;
+}
+.sales-start:hover{
+  color: black;
+  background-color: lightyellow;
 }
 .sales-end{
   background-color: #8080804d;
