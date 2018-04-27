@@ -2,7 +2,7 @@
   "name": "event_save",
   "version": "0.1.0",
   "private": true,
-  "main":"App.js",
+  "main": "App.js",
   "proxy": "http://localhost:3001",
   "dependencies": {
     "react": "^16.3.2",
