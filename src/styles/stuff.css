@@ -30,6 +30,7 @@
   display: flex;
   padding-top: 22px;
   flex-direction: column;
+  margin-right: 20px
 }
 .event-image{
   border-left: 2px solid rgba(93, 93, 241, 0.58);
@@ -77,4 +78,43 @@
   background-color: #8080804d;
   border: 1px solid #8080804d;
   color: white;
+}
+.react-add-to-calendar{
+  -webkit-font-smoothing: antialiased;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
+  position: relative;
+  display: inline-block;
+  margin: 0 auto;
+  padding-top: 15px;
+}
+.react-add-to-calendar__wrapper{
+  zoom: 1;
+  cursor: pointer;
+}
+.react-add-to-calendar__button{
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #aab9d4;
+  border-radius: 23px;
+  color: #000;
+}
+.react-add-to-calendar__button--light{
+  background-color: #fff;
+}
+.react-add-to-calendar__dropdown{
+  margin-top: 16px;
+  position: absolute;
+  border-radius: 23px;
+  top: 30px;
+  left: 1px;
+  width: 93%;
+  padding: 5px 0 5px 8px;
+  box-shadow: 1px 3px 6px rgba(0, 0, 0, 0.15);
+  border: 1px solid #a8a8a8;
+  background-color: #fff;
+  text-align: left;
+  z-index: 2;
+}
+.react-add-to-calendar__icon--right{
+  display: none;
 }
