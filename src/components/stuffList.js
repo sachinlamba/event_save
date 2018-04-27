@@ -115,33 +115,49 @@ class stuffList extends React.Component {
           endTime: item.sales.public.startDateTime
         };
         return <div className="events-box" key={item.id}>
-                    <div className="event-details">
+          <div className="event-image col-md-2">
+            <img className="img-responsive" alt={item.name} src={item.images[2].url} />
+          </div>
+
+                    <div className="event-details" style={{padding: "10px"}}>
                       <div className="event-name">
-                        <label style={{padding: "43px"}}>{item.name}</label>
+                       <h4 style={{color:"#f7786b"}}>Event Information:</h4>
+                        <label style={{fontSize:"20px"}}>{item.name}</label>
+
+                        <div className="event-venue">
+
+                           <h4 style={{color:"#f7786b"}}>Venue:</h4>
+                          {
+                            item._embedded ?
+                              <label onClick={()=>window.open(item._embedded.venues[0].url, '_target')}
+                                 className="event-address">{"  " + item._embedded.venues[0].name}</label>
+                              :
+                              <label className="event-address">{"  " + item.place[0].address}</label>
+                          }
+                          </div>
+
+                          <div className="event-dates">Tickets publically available from {displaysDate} to {displayeDate}</div>
+
                       </div>
+
+
+
+
                       <div className="button-space">
-                        <div className={"button " + buttonBuy} onClick={() => window.open(item.url, '_target')}>Buy</div>
+                        <div className={"btn " + buttonBuy} onClick={() => window.open(item.url, '_target')}>Buy</div>
                         {this.state.savedEvents[item.id] ?
-                          <div className="button" onClick={this.removeFromEvents.bind(this, item)}>Remove</div>
+                          <div className="btn" onClick={this.removeFromEvents.bind(this, item)}>Remove</div>
                         :
-                          <div className="button event-adder" onClick={this.addToEvents.bind(this, item)}>Save to list</div>
+                          <div className="btn btn-info event-adder" style={{marginTop:"10px",marginBottom:"5px"}}onClick={this.addToEvents.bind(this, item)}>Save to list</div>
                         }
                         <AddToCalendar event={event}/>
                       </div>
-                      <div className="event-image">
-                        <img className="event-small-image" alt={item.name} src={item.images[2].url} />
-                      </div>
+
                     </div>
-                    <div className="event-venue" style={{marginLeft: left}}>Venue :
-                      {
-                        item._embedded ?
-                          <label onClick={()=>window.open(item._embedded.venues[0].url, '_target')}
-                             className="event-address">{"  " + item._embedded.venues[0].name}</label>
-                          :
-                          <label className="event-address">{"  " + item.place[0].address}</label>
-                      }
-                      </div>
-                      <div className="event-dates">Tickets publically available from {displaysDate} to {displayeDate}</div>
+
+
+
+
                     {/* {item._embedded.venues[0].address.line1 + " > " +
                     item._embedded.venues[0].city.name + " > " +
                     item._embedded.venues[0].state.name + " > " +
@@ -168,40 +184,62 @@ class stuffList extends React.Component {
              width2 = window.innerWidth - 120;
              let pageDiv = [];
           if(this.state.pageLevel === 0){
-            pageDiv.push(<div>
-                            <div>Plan your day</div>
-                            <div>Who are you?</div>
-                            <div className="radio">
-                              <label>
+            pageDiv.push(<div className="container" style={{textAlign:"center"}}>
+
+
+                            <div className="col-md-8 col-md-offset-2" style={{backgroundColor:"#f9f9f9",padding:"10px",marginTop:"20px",paddingBottom:"40px"}}>
+                            <h3>Plan your day!</h3>
+
+                            <h4 style={{marginTop:"5px"}}>Who are you?</h4>
+
+
+
+
+                             {/* <label class="radio-inline">
+                       <input type="radio" name="optradio"/>Option 1
+                     </label>
+
+                     <label class="radio-inline">
+                       <input type="radio" name="optradio"/>Option 2
+                     </label>
+
+                     <label class="radio-inline">
+                       <input type="radio" name="optradio"/>Option 3
+                     </label> */}
+
+
+
+                              <label class="radio-inline">
                                 <input type="radio" value="0" checked={this.state.includeFamily == "0"}
                                   onChange={this.familyOptionChange.bind(this)}
                                 />
                                 Friends
                               </label>
-                            </div>
-                            <div className="radio">
-                              <label>
+
+
+                              <label class="radio-inline">
                                 <input type="radio" value="1" checked={this.state.includeFamily == "1"}
                                   onChange={this.familyOptionChange.bind(this)}
                                 />
                                 Family
                               </label>
-                            </div>
-                            <div className="radio">
-                              <label>
+
+
+                              <label class="radio-inline">
                                 <input type="radio" value="2" checked={this.state.includeFamily == "2"}
                                   onChange={this.familyOptionChange.bind(this)}
                                 />
                                 Single
                               </label>
-                            </div>
-                            <div className="radio">
-                              <label>
+
+
+                              <label class="radio-inline">
                                 <input type="radio" value="3" checked={this.state.includeFamily == "3"}
                                   onChange={this.familyOptionChange.bind(this)}
                                 />
                                 Couple
                               </label>
+
                             </div>
                         </div>)
 
