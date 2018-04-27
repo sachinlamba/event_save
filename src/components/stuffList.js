@@ -18,6 +18,7 @@ class stuffList extends React.Component {
        this.state = {
           pages: ["start", "viewEvent", "newEvent", "save"],
           pageLevel: 0,
+          includeFamily: "1",
           savedEvents: [],
           dates: {
             start: new Date(2018, 3, 30),
@@ -30,15 +31,19 @@ class stuffList extends React.Component {
     }
     moveToNextPage(){
       this.setState({pageLevel: this.state.pageLevel+1});
+      //as asyn state is updating,so we use 0 page no here..would have used 1 actually..
+      if(this.state.pageLevel == 0){
+        this.props.stuffActions.fetchStuff(this.state);
+      }
     }
     moveToPreviousPage(){
       this.setState({pageLevel: this.state.pageLevel-1});
     }
-    componentWillMount() {
-        this.props.stuffActions.fetchStuff(this.state.dates.start, this.state.dates.end);
-    }
+    // componentWillMount() {
+    //     this.props.stuffActions.fetchStuff(this.state.dates.start, this.state.dates.end);
+    // }
     filterByDate(){
-      this.props.stuffActions.fetchStuff(this.state.dates.start, this.state.dates.end);
+      this.props.stuffActions.fetchStuff(this.state);
     }
     addToEvents(event){
       let add = this.state.savedEvents;
@@ -82,17 +87,26 @@ class stuffList extends React.Component {
                       </div>
                     </div>
                     <div className="event-venue" style={{marginLeft: left}}>Venue :
-                              <label onClick={()=>window.open(item._embedded.venues[0].url, '_target')}
-                                 className="event-address">{"  " + item._embedded.venues[0].name}</label>
-                                                    </div>
-                                                    {/* {item._embedded.venues[0].address.line1 + " > " +
-                                                    item._embedded.venues[0].city.name + " > " +
-                                                    item._embedded.venues[0].state.name + " > " +
-                                                    item._embedded.venues[0].country.countryCode} */}
+                      {
+                        item._embedded ?
+                          <label onClick={()=>window.open(item._embedded.venues[0].url, '_target')}
+                             className="event-address">{"  " + item._embedded.venues[0].name}</label>
+                          :
+                          <label className="event-address">{"  " + item.place[0].address}</label>
+                      }
+                      </div>
+                    {/* {item._embedded.venues[0].address.line1 + " > " +
+                    item._embedded.venues[0].city.name + " > " +
+                    item._embedded.venues[0].state.name + " > " +
+                    item._embedded.venues[0].country.countryCode} */}
                     {/* <div style={{position: "absolute"}}>Tickets publically available from {displaysDate} to {displayeDate}</div> */}
                 </div>;
     }
-
+    familyOptionChange(changeEvent) {
+      this.setState({
+        includeFamily: changeEvent.target.value
+      });
+    }
     render() {
         if(!this.props.stuff){
             return (
@@ -106,24 +120,57 @@ class stuffList extends React.Component {
               width = window.innerWidth/2 - 20,
              width1 = window.innerWidth/3,
              width2 = window.innerWidth - 120;
+             let pageDiv = [];
           if(this.state.pageLevel === 0){
-            return <div>
-                        <div>Want to go with Family or Friends</div>
-                        <div style={{marginLeft: width2}} className="filter-button" onClick={this.moveToNextPage}>
-                          Next Page
-                        </div>
-                    </div>
+            pageDiv.push(<div>
+                            <div>Plan your day</div>
+                            <div>Who are you?</div>
+                            <div className="radio">
+                              <label>
+                                <input type="radio" value="0" checked={this.state.includeFamily == "0"}
+                                  onChange={this.familyOptionChange.bind(this)}
+                                />
+                                Friends
+                              </label>
+                            </div>
+                            <div className="radio">
+                              <label>
+                                <input type="radio" value="1" checked={this.state.includeFamily == "1"}
+                                  onChange={this.familyOptionChange.bind(this)}
+                                />
+                                Family
+                              </label>
+                            </div>
+                            <div className="radio">
+                              <label>
+                                <input type="radio" value="2" checked={this.state.includeFamily == "2"}
+                                  onChange={this.familyOptionChange.bind(this)}
+                                />
+                                Single
+                              </label>
+                            </div>
+                            <div className="radio">
+                              <label>
+                                <input type="radio" value="3" checked={this.state.includeFamily == "3"}
+                                  onChange={this.familyOptionChange.bind(this)}
+                                />
+                                Couple
+                              </label>
+                            </div>
+                        </div>)
 
           }else if(this.state.pageLevel === 1){
-            return (
+            pageDiv.push(
               <div>
                 <div className="" style={{display:"flex",width:"100%",  height }}>
                     <div style={{flex:"1", height: "96%", overflow: "auto", margin: "5px"}}>{
-                        data.map((item, index) => {
+                        data.length ? data.map((item, index) => {
                             return (
                                 this.renderData(item)
                             );
                         })
+                        :
+                        <div>No Data available right now</div>
                     }</div>
                     <div style={{height: "96%", overflow: "hidden",}}>
                       <InfiniteCalendar
@@ -136,20 +183,22 @@ class stuffList extends React.Component {
                       />
                   </div>
                 </div>
-                <div style={{display: "inline-block"}} className="filter-button" onClick={this.moveToPreviousPage}>Previous Page</div>
-                <div style={{marginLeft: width1, display: "inline-block"}} className="filter-button" onClick={this.filterByDate}>Filter events</div>
-                <div style={{display: "inline-block", marginLeft: width1}} className="filter-button" onClick={this.moveToNextPage}>Next Page</div>
+                <div style={{left: width, position: "absolute"}} className="button filter-button" onClick={this.filterByDate}>Filter events</div>
               </div>
             )
           }else if(this.state.pageLevel === 2){
-            return <div>
+            pageDiv.push(<div>
                         <div>want to mail saved event calender?</div>
-                        <div className="filter-button" onClick={this.moveToPreviousPage}>
-                          Previous Page
-                        </div>
-                    </div>
+                        </div>)
 
           }
+          if(this.state.pageLevel != 0){
+            pageDiv.push(<div style={{position: "absolute", left: "22px", bottom: "10px"}} className="button filter-button" onClick={this.moveToPreviousPage}>Previous Page</div>);
+          }
+          if(this.state.pageLevel < this.state.pages.length-1){
+            pageDiv.push(<div style={{position: "absolute", right: "22px", bottom: "10px"}} className="button filter-button" onClick={this.moveToNextPage}>Next Page</div>)
+          }
+          return pageDiv;
         }
     }
 }
