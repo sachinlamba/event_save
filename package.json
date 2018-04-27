@@ -6,6 +6,7 @@
   "proxy": "http://localhost:3001",
   "dependencies": {
     "react": "^16.3.2",
+    "react-add-to-calendar": "^0.1.5",
     "react-addons-css-transition-group": "^15.6.2",
     "react-dom": "^16.3.2",
     "react-infinite-calendar": "^2.3.1",
