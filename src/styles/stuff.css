@@ -2,7 +2,7 @@
   border: 1px solid black;
   border-radius: 15px;
   min-width: 80px;
-  max-width: 150px;
+  max-width: 450px;
   height: 24px;
   padding-top: 4px;
   margin: 1px;
@@ -43,16 +43,19 @@
 .filter-button{
   height: 25px;
   color: white;
-  max-width: 100px;
+  max-width: 400px;
   background-color: deepskyblue;
   border: 1px solid deepskyblue;
-  padding-top: 5px;
+  padding: 8px 10px 1px 9px;
   text-align: center;
   cursor: pointer;
 }
 .event-address{
   cursor: pointer;
   color: blue;
+}
+.event-dates{
+
 }
 .sales-not-start{
   cursor: pointer;
