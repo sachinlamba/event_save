@@ -10,6 +10,9 @@ import InfiniteCalendar, {
   withRange,
 } from 'react-infinite-calendar';
 import 'react-infinite-calendar/styles.css';
+// import * as ICS from 'ics-js';
+import AddToCalendar from 'react-add-to-calendar';
+import '../styles/atc-style-glow-orange.css';
 const CalendarWithRange = withRange(Calendar);
 
 class stuffList extends React.Component {
@@ -18,12 +21,25 @@ class stuffList extends React.Component {
        this.state = {
           pages: ["start", "viewEvent", "newEvent", "save"],
           pageLevel: 0,
-          includeFamily: "1",
-          savedEvents: [],
+          includeFamily: "0",
+          savedEvents: {},
           dates: {
             start: new Date(2018, 3, 30),
             end: new Date(2018, 4, 2)
           }
+          // ,event: [{
+          //           title: 'Sample Event',
+          //           description: 'This is the sample event provided as an example only',
+          //           location: 'Portland, OR',
+          //           startTime: '2016-09-16T20:15:00-04:00',
+          //           endTime: '2016-09-16T21:45:00-04:00'
+          //         },{
+          //           title: 'Sample Event',
+          //           description: 'This is the sample event provided as an example only',
+          //           location: 'Portland, OR',
+          //           startTime: '2016-09-16T20:15:00-04:00',
+          //           endTime: '2016-09-16T21:45:00-04:00'
+          //         }]
        }
        this.filterByDate = this.filterByDate.bind(this);
        this.moveToNextPage = this.moveToNextPage.bind(this);
@@ -47,19 +63,41 @@ class stuffList extends React.Component {
     }
     addToEvents(event){
       let add = this.state.savedEvents;
-      add.push(event.id);
+      add[event.id] = event;
       this.setState({savedEvents: add})
     }
     removeFromEvents(event){
-
+      let add = this.state.savedEvents;
+      delete add[event.id];
+      this.setState({savedEvents: add})
+    }
+    createEventFile(){
+      // var cal = ics();
+      // cal.addEvent("check", "ehloo", "India", new Date(), new Date());
+      // cal.addEvent("subject", "description", "location",  new Date(), new Date()); // yes, you can have multiple events :-)
+      // cal.download("Events");
+      // const cal = new ICS.VCALENDAR();
+      // cal.addProp('VERSION', 2) // Number(2) is converted to '2.0'
+      // cal.addProp('PRODID', 'XYZ Corp');
+      // const event = new ICS.VEVENT();
+      // event.addProp('UID');
+      // event.addProp('DTSTAMP', new Date(), { VALUE: 'DATE-TIME' });
+      // event.addProp('ATTENDEE', null, {
+      //   CN: 'Happd BDAY',
+      //   RSVP: 'FALSE:mailto:foo@example.com'
+      // })
+      //
+      // cal.addComponent(event);
+      // var icsMSG = cal.toString();
+      // window.open( "data:text/calendar;charset=utf8," + escape(icsMSG));
     }
 
     renderData(item) {
       let sDate = new Date(item.sales.public.startDateTime),
           eDate = new Date(item.sales.public.endDateTime),
           todayDate = new Date();
-      // let displaysDate = sDate.getFullYear() + "-" + sDate.getMonth() + "-" + sDate.getDate(),
-      //     displayeDate = eDate.getFullYear() + "-" + eDate.getMonth() + "-" + eDate.getDate();
+      let displaysDate = sDate.getFullYear() + "-" + sDate.getMonth() + "-" + sDate.getDate(),
+          displayeDate = eDate.getFullYear() + "-" + eDate.getMonth() + "-" + eDate.getDate();
       let left = window.innerWidth/3;
       let buttonBuy;
         if(sDate > todayDate){
@@ -69,6 +107,13 @@ class stuffList extends React.Component {
         }else{
           buttonBuy = "sales-end";
         }
+        let event = {
+          title: item.name,
+          description: item.info,
+          location: item._embedded ? item._embedded.venues[0].name : item.place[0].address,
+          startTime: item.sales.public.startDateTime,
+          endTime: item.sales.public.startDateTime
+        };
         return <div className="events-box" key={item.id}>
                     <div className="event-details">
                       <div className="event-name">
@@ -76,11 +121,12 @@ class stuffList extends React.Component {
                       </div>
                       <div className="button-space">
                         <div className={"button " + buttonBuy} onClick={() => window.open(item.url, '_target')}>Buy</div>
-                        {this.state.savedEvents.indexOf(item.id) > -1 ?
+                        {this.state.savedEvents[item.id] ?
                           <div className="button" onClick={this.removeFromEvents.bind(this, item)}>Remove</div>
                         :
-                          <div className="button event-adder" onClick={this.addToEvents.bind(this, item)}>Save</div>
+                          <div className="button event-adder" onClick={this.addToEvents.bind(this, item)}>Save to list</div>
                         }
+                        <AddToCalendar event={event}/>
                       </div>
                       <div className="event-image">
                         <img className="event-small-image" alt={item.name} src={item.images[2].url} />
@@ -95,11 +141,11 @@ class stuffList extends React.Component {
                           <label className="event-address">{"  " + item.place[0].address}</label>
                       }
                       </div>
+                      <div className="event-dates">Tickets publically available from {displaysDate} to {displayeDate}</div>
                     {/* {item._embedded.venues[0].address.line1 + " > " +
                     item._embedded.venues[0].city.name + " > " +
                     item._embedded.venues[0].state.name + " > " +
                     item._embedded.venues[0].country.countryCode} */}
-                    {/* <div style={{position: "absolute"}}>Tickets publically available from {displaysDate} to {displayeDate}</div> */}
                 </div>;
     }
     familyOptionChange(changeEvent) {
@@ -183,12 +229,22 @@ class stuffList extends React.Component {
                       />
                   </div>
                 </div>
-                <div style={{left: width, position: "absolute"}} className="button filter-button" onClick={this.filterByDate}>Filter events</div>
+                <div style={{left: width, position: "absolute", bottom: "10px"}} className="button filter-button" onClick={this.filterByDate}>Filter events</div>
               </div>
             )
           }else if(this.state.pageLevel === 2){
             pageDiv.push(<div>
                         <div>want to mail saved event calender?</div>
+                        <div style={{flex:"1", height: "96%", overflow: "auto", margin: "5px"}}>{
+                            Object.keys(this.state.savedEvents).length ? Object.keys(this.state.savedEvents).map((item, index) => {
+                                return (
+                                    this.renderData(this.state.savedEvents[item])
+                                );
+                            })
+                            :
+                            <div>No Data available right now</div>
+                        }</div>
+                        <div style={{left: width, position: "absolute", bottom: "10px", width: "150px"}} className="button filter-button" onClick={this.createEventFile.bind(this)}>Import All Events</div>
                         </div>)
 
           }
