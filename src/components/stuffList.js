@@ -12,6 +12,9 @@ import InfiniteCalendar, {
 import 'react-infinite-calendar/styles.css';
 // import * as ICS from 'ics-js';
 import AddToCalendar from 'react-add-to-calendar';
+import { Carousel } from 'react-responsive-carousel';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+
 //import '../styles/atc-style-glow-orange.css';
 const CalendarWithRange = withRange(Calendar);
 
@@ -114,9 +117,14 @@ class stuffList extends React.Component {
           startTime: item.sales.public.startDateTime,
           endTime: item.sales.public.startDateTime
         };
+        return
+      <div>
+          <img src={item.images[2].url}/>
+          <p className="legend">{item.name}</p>
+      </div>
         return <div className="events-box" key={item.id}>
-          <div className="event-image col-md-2">
-            <img className="img-responsive" alt={item.name} src={item.images[2].url} />
+          <div className="event-image col-md-3`">
+            <img className="img-circle img-responsive " alt={item.name} src={item.images[2].url} />
           </div>
 
                     <div className="event-details" style={{padding: "10px"}}>
@@ -126,7 +134,7 @@ class stuffList extends React.Component {
 
                         <div className="event-venue">
 
-                           <h4 style={{color:"#f7786b"}}>Venue:</h4>
+                           <h4 style={{color:"#f7786b", display: "inline-block"}}>Venue:</h4>
                           {
                             item._embedded ?
                               <label onClick={()=>window.open(item._embedded.venues[0].url, '_target')}
@@ -170,6 +178,34 @@ class stuffList extends React.Component {
       });
     }
     render() {
+      // return (
+      //       <Carousel showArrows={true} >
+      //           <div>
+      //               <img src="https://raw.githubusercontent.com/andyyou/react-coverflow/gh-pages/images/preview.png" />
+      //               <p className="legend">Legend 1</p>
+      //           </div>
+      //           <div>
+      //               <img src="https://raw.githubusercontent.com/andyyou/react-coverflow/gh-pages/images/preview.png" />
+      //               <p className="legend">Legend 2</p>
+      //           </div>
+      //           <div>
+      //               <img src="https://raw.githubusercontent.com/andyyou/react-coverflow/gh-pages/images/preview.png" />
+      //               <p className="legend">Legend 3</p>
+      //           </div>
+      //           <div>
+      //               <img src="https://raw.githubusercontent.com/andyyou/react-coverflow/gh-pages/images/preview.png" />
+      //               <p className="legend">Legend 4</p>
+      //           </div>
+      //           <div>
+      //               <img src="https://raw.githubusercontent.com/andyyou/react-coverflow/gh-pages/images/preview.png" />
+      //               <p className="legend">Legend 5</p>
+      //           </div>
+      //           <div>
+      //               <img src="https://raw.githubusercontent.com/andyyou/react-coverflow/gh-pages/images/preview.png" />
+      //               <p className="legend">Legend 6</p>
+      //           </div>
+      //       </Carousel>
+      //   );
         if(!this.props.stuff){
             return (
                 <div style={{marginTop: "18%", marginLeft: "50%"}}>
@@ -183,7 +219,41 @@ class stuffList extends React.Component {
              width1 = window.innerWidth/3,
              width2 = window.innerWidth - 120;
              let pageDiv = [];
+
           if(this.state.pageLevel === 0){
+           //  pageDiv.push(<div id="myCarousel" class="carousel slide" data-ride="carousel">
+           //     <ol class="carousel-indicators">
+           //       <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+           //       <li data-target="#myCarousel" data-slide-to="1"></li>
+           //     </ol>
+           //
+           //     <div class="carousel-inner" role="listbox">
+           //       <div class="item active">
+           //         <img src="https://placehold.it/1200x400?text=IMAGE" alt="Image"/>
+           //         <div class="carousel-caption">
+           //           <h3>Sell $</h3>
+           //           <p>Money Money.</p>
+           //         </div>
+           //       </div>
+           //
+           //       <div class="item">
+           //         <img src="https://placehold.it/1200x400?text=Another Image Maybe" alt="Image"/>
+           //         <div class="carousel-caption">
+           //           <h3>More Sell $</h3>
+           //           <p>Lorem ipsum...</p>
+           //         </div>
+           //       </div>
+           //     </div>
+           //
+           //     <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+           //       <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+           //       <span class="sr-only">Previous</span>
+           //     </a>
+           //     <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+           //       <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+           //       <span class="sr-only">Next</span>
+           //     </a>
+           // </div>)
             pageDiv.push(<div className="container" style={{textAlign:"center"}}>
 
 
@@ -246,28 +316,54 @@ class stuffList extends React.Component {
           }else if(this.state.pageLevel === 1){
             pageDiv.push(
               <div>
-                <div className="" style={{display:"flex",width:"100%",  height }}>
-                    <div style={{flex:"1", height: "96%", overflow: "auto", margin: "5px"}}>{
-                        data.length ? data.map((item, index) => {
-                            return (
-                                this.renderData(item)
-                            );
-                        })
-                        :
-                        <div>No Data available right now</div>
-                    }</div>
-                    <div style={{height: "96%", overflow: "hidden",}}>
-                      <InfiniteCalendar
-                        Component={CalendarWithRange}
-                        selected={this.state.dates}
-                        locale={{
-                          headerFormat: 'MMM Do',
-                        }}
-                        onSelect={(d) => {this.setState({dates : {start: d.start, end: d.end}}); }}
-                      />
-                  </div>
+                <div className="">
+                <div showArrows={true}>
+                {
+                data.length ? <Carousel showArrows={true}>{data.map((item, index) => {
+                        return (
+                          <div>
+                              <img src={item.images[2].url}/>
+                              <p className="legend">{item.name}</p>
+                          </div>
+                        );
+                    })
+                  }</Carousel>
+                  :
+                  <div class="loader"></div>
+                //   <Carousel showArrows={true}>
+                //     <div>
+                //       <img src="https://giphy.com/gifs/google-icon-loading-jAYUbVXgESSti" />
+                //       <p className="legend">Loading ...</p>
+                //     </div>
+                // </Carousel>
+                }
                 </div>
-                <div style={{left: width, position: "absolute", bottom: "10px"}} className="button filter-button" onClick={this.filterByDate}>Filter events</div>
+                    {
+                    //   <div style={{flex:"1", height: "96%", overflow: "auto", margin: "5px"}}>{
+                    //     data.length ? data.map((item, index) => {
+                    //         return (
+                    //             this.renderData(item)
+                    //         );
+                    //     })
+                    //     :
+                    //     <div>No Data available right now</div>
+                    // }
+                    // </div>
+                  }
+                  {
+                  //    <div style={{height: "96%", overflow: "hidden",}}>
+                  //     <InfiniteCalendar
+                  //       Component={CalendarWithRange}
+                  //       selected={this.state.dates}
+                  //       locale={{
+                  //         headerFormat: 'MMM Do',
+                  //       }}
+                  //       onSelect={(d) => {this.setState({dates : {start: d.start, end: d.end}}); }}
+                  //     />
+                  // </div>
+                }
+                </div>
+                <div style={{left: width, position: "absolute", bottom: "10px"}} className="btn btn-primary" onClick={this.filterByDate}>Filter events</div>
               </div>
             )
           }else if(this.state.pageLevel === 2){
@@ -282,15 +378,15 @@ class stuffList extends React.Component {
                             :
                             <div>No Data available right now</div>
                         }</div>
-                        <div style={{left: width, position: "absolute", bottom: "10px", width: "150px"}} className="button filter-button" onClick={this.createEventFile.bind(this)}>Import All Events</div>
+                        <div style={{left: width, position: "absolute", bottom: "10px", width: "150px"}} className="btn btn-primary" onClick={this.createEventFile.bind(this)}>Import All Events</div>
                         </div>)
 
           }
           if(this.state.pageLevel != 0){
-            pageDiv.push(<div style={{position: "absolute", left: "22px", bottom: "10px"}} className="button filter-button" onClick={this.moveToPreviousPage}>Previous Page</div>);
+            pageDiv.push(<div style={{position: "absolute", left: "22px", bottom: "10px"}} className="btn btn-primary" onClick={this.moveToPreviousPage}>Previous Page</div>);
           }
           if(this.state.pageLevel < this.state.pages.length-1){
-            pageDiv.push(<div style={{position: "absolute", right: "22px", bottom: "10px"}} className="button filter-button" onClick={this.moveToNextPage}>Next Page</div>)
+            pageDiv.push(<div style={{position: "absolute", right: "22px", bottom: "10px"}} className="btn btn-primary" onClick={this.moveToNextPage}>Next Page</div>)
           }
           return pageDiv;
         }
