@@ -13,14 +13,32 @@ export function formattedDate(d) {
 
   return `${year}-${month}-${day}`;
 }
-export function fetchStuff(startDate, endDate) {
+export function fetchStuff(state) {
   let sDate = formattedDate(new Date());
-  if(startDate && startDate != ""){
-    sDate = formattedDate(startDate)
+  if(state.dates && state.dates.start != ""){
+    sDate = formattedDate(state.dates.start)
   }
-  let url = 'https://app.ticketmaster.com/discovery/v2/events.json?apikey=ajp0wkSehryzWQo24JvhNAuCF6RX2wyN&startDateTime='+sDate+'T00:00:00Z';
-  if(endDate && endDate != ""){
-    let eDate = formattedDate(endDate)
+  let includeFamily;
+  switch (state.includeFamily) {
+    case "0":
+      includeFamily = "no";
+      break;
+    case "1":
+      includeFamily = "only";
+      break;
+    case "2":
+      includeFamily = "no";
+      break;
+    case "3":
+      includeFamily = "yes";
+      break;
+    default:
+      includeFamily = "no";
+  }
+  let url = 'https://app.ticketmaster.com/discovery/v2/events.json?apikey=ajp0wkSehryzWQo24JvhNAuCF6RX2wyN&startDateTime='+sDate
+      +'T00:00:00Z&includeFamily='+includeFamily;
+  if(state.dates && state.dates.end != ""){
+    let eDate = formattedDate(state.dates.end)
     url += '&EndDateTime='+eDate+'T00:00:00Z';
   }
     return (dispatch) => {
