@@ -31,7 +31,8 @@ class stuffList extends React.Component {
             end: new Date(2018, 4, 2)
           },
           calenderOpen: false,
-          selectedItem: 0
+          selectedItem: 0,
+          filePreparred: false
           // ,event: [{
           //           title: 'Sample Event',
           //           description: 'This is the sample event provided as an example only',
@@ -52,6 +53,7 @@ class stuffList extends React.Component {
        this.calenderCloser = this.calenderCloser.bind(this);
        this.calenderOpener = this.calenderOpener.bind(this);
        this.carouselItemChange = this.carouselItemChange.bind(this);
+       this.createEventFile = this.createEventFile.bind(this);
     }
     carouselItemChange(itemSelected){
       this.setState({
@@ -100,6 +102,20 @@ class stuffList extends React.Component {
       this.setState({savedEvents: add})
     }
     createEventFile(){
+      let icsMSG = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Our Company//NONSGML v1.0//EN\n"
+      Object.keys(this.state.savedEvents).map(eventId => {
+        let item = this.state.savedEvents[eventId];
+        console.log("icsMSG" ,item);
+        icsMSG += "BEGIN:VEVENT\nUID:me@google.com\nDTSTAMP:20120315T170000Z\nATTENDEE;CN=My Self ;RSVP=TRUE:MAILTO:me@gmail.com\nORGANIZER;CN=Me:MAILTO::me@gmail.com\nDTSTART:" +"20120315T170000Z" +"\nDTEND:" + "20120315T170000Z"+"\nLOCATION:" + "India"+ "\nSUMMARY:Our Meeting Office\nEND:VEVENT\n"
+      })
+      icsMSG += "END:VCALENDAR";
+      console.log("icsMSG11", icsMSG);
+      var a = document.getElementById("a");
+      var file = new Blob([icsMSG], {type: "text/plain"});
+      a.href = URL.createObjectURL(file);
+      a.download = "down.ics";
+      this.setState({filePreparred: true});
+      // window.open( "data:text/calendar;charset=utf8," + escape(icsMSG));
       // var cal = ics();
       // cal.addEvent("check", "ehloo", "India", new Date(), new Date());
       // cal.addEvent("subject", "description", "location",  new Date(), new Date()); // yes, you can have multiple events :-)
@@ -367,9 +383,11 @@ class stuffList extends React.Component {
                             :
                             <div>No Data available right now</div>
                         }</div>
-                        <div style={{left: width, position: "absolute", bottom: "10px", width: "150px"}} className="btn btn-primary disabled" onClick={this.createEventFile.bind(this)}>Import All Events</div>
-                        </div>)
+                        <div style={{left: width1, position: "absolute", bottom: "10px", width: "150px"}} className={"btn btn-primary "  + (!this.state.filePreparred ? "" : "disabled")} onClick={this.createEventFile.bind(this)}>Prepare Event file</div>
 
+                          <div style={{left: width, position: "absolute", bottom: "10px", width: "150px"}} className={"btn btn-primary " + (this.state.filePreparred ? "" : "disabled")}><a style={{color: "white"}} href="" id="a">Import Events</a></div>
+
+                        </div>)
           }
           if(this.state.pageLevel != 0){
             pageDiv.push(<div style={{position: "absolute", left: "22px", bottom: "10px"}} className="btn btn-primary" onClick={this.moveToPreviousPage}>Previous Page</div>);
