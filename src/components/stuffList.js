@@ -290,14 +290,16 @@ class stuffList extends React.Component {
                               <img src={item.images[2].url}/>
                               <p className="legend">{item.name}
 
-                              <div>
-                                <div className="btn btn-primary" onClick={() => window.open(item.url, '_target')}>Buy</div>
+                              <div style={{display: "inline", marginLeft: "15px"}}>
+                                <div style={{margin: "0px 15px"}} className="btn btn-primary" onClick={() => window.open(item.url, '_target')}>Buy</div>
                                 {this.state.savedEvents[item.id] ?
-                                  <div className="btn btn-primary" onClick={this.removeFromEvents.bind(this, item)}>Remove</div>
+                                  <div style={{margin: "0px 15px"}} className="btn btn-primary" onClick={this.removeFromEvents.bind(this, item)}>Remove</div>
                                 :
-                                  <div className="btn btn-info "onClick={this.addToEvents.bind(this, item)}>Save to list</div>
+                                  <div style={{margin: "0px 15px"}} className="btn btn-info "onClick={this.addToEvents.bind(this, item)}>Save to list</div>
                                 }
+                                <div style={{margin: "0px 15px", display: "inline"}} >
                                 <AddToCalendar event={event}/>
+                                </div>
                               </div>
 
                               </p>
