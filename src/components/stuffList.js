@@ -30,7 +30,8 @@ class stuffList extends React.Component {
             start: new Date(2018, 3, 30),
             end: new Date(2018, 4, 2)
           },
-          calenderOpen: false
+          calenderOpen: false,
+          selectedItem: 0
           // ,event: [{
           //           title: 'Sample Event',
           //           description: 'This is the sample event provided as an example only',
@@ -50,6 +51,12 @@ class stuffList extends React.Component {
        this.moveToPreviousPage = this.moveToPreviousPage.bind(this);
        this.calenderCloser = this.calenderCloser.bind(this);
        this.calenderOpener = this.calenderOpener.bind(this);
+       this.carouselItemChange = this.carouselItemChange.bind(this);
+    }
+    carouselItemChange(itemSelected){
+      this.setState({
+        selectedItem: itemSelected
+      })
     }
     calenderOpener(){
       this.setState({
@@ -277,7 +284,7 @@ class stuffList extends React.Component {
                 <div>
                 <div>
                 {
-                data.length ? <Carousel showArrows={true}>{data.map((item, index) => {
+                data.length ? <Carousel showArrows={true} selectedItem={this.state.selectedItem} onChange={this.carouselItemChange}>{data.map((item, index) => {
                   let event = {
                     title: item.name,
                     description: item.info,

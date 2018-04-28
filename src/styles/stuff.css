@@ -115,6 +115,10 @@
   text-align: left;
   z-index: 2;
 }
+.react-add-to-calendar__dropdown > ul{
+  white-space: nowrap;
+  padding-left: 10px
+}
 .react-add-to-calendar__icon--right{
   display: none;
 }
