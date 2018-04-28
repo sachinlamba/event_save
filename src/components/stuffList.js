@@ -22,7 +22,7 @@ class stuffList extends React.Component {
     constructor(props) {
        super(props);
        this.state = {
-          pages: ["start", "viewEvent", "newEvent", "save"],
+          pages: ["start", "viewEvent", "newEvent"],
           pageLevel: 0,
           includeFamily: "0",
           savedEvents: {},
@@ -345,7 +345,8 @@ class stuffList extends React.Component {
                 <div style={{left: width, position: "absolute", bottom: "10px"}} className="btn btn-primary" onClick={this.filterByDate}>Filter events</div>
               </div>
             )
-          }else if(this.state.pageLevel === 2){
+          }
+          else if(this.state.pageLevel === 2){
             pageDiv.push(<div style={{textAlign:"center", height: fullHeight, width: fullWidth, padding: "26px"}}>
                         <div style={{textAlign: "center"}}><h2>want to mail saved event calender?</h2></div>
                         <div style={{flex:"1", height: height, overflow: "auto", margin: "5px"}}>{
@@ -357,7 +358,7 @@ class stuffList extends React.Component {
                             :
                             <div>No Data available right now</div>
                         }</div>
-                        <div style={{left: width, position: "absolute", bottom: "10px", width: "150px"}} className="btn btn-primary" onClick={this.createEventFile.bind(this)}>Import All Events</div>
+                        <div style={{left: width, position: "absolute", bottom: "10px", width: "150px"}} className="btn btn-primary disabled" onClick={this.createEventFile.bind(this)}>Import All Events</div>
                         </div>)
 
           }
