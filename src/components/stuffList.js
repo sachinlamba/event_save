@@ -29,7 +29,8 @@ class stuffList extends React.Component {
           dates: {
             start: new Date(2018, 3, 30),
             end: new Date(2018, 4, 2)
-          }
+          },
+          calenderOpen: false
           // ,event: [{
           //           title: 'Sample Event',
           //           description: 'This is the sample event provided as an example only',
@@ -47,6 +48,23 @@ class stuffList extends React.Component {
        this.filterByDate = this.filterByDate.bind(this);
        this.moveToNextPage = this.moveToNextPage.bind(this);
        this.moveToPreviousPage = this.moveToPreviousPage.bind(this);
+       this.calenderCloser = this.calenderCloser.bind(this);
+       this.calenderOpener = this.calenderOpener.bind(this);
+    }
+    calenderOpener(){
+      this.setState({
+        calenderOpen: true
+      })
+      document.addEventListener("click", this.calenderCloser)
+    }
+    calenderCloser(event){
+      if(!document.getElementsByClassName('Cal__Container__root')[0].contains(event.target)){
+        this.setState({
+          calenderOpen: false
+        })
+        document.removeEventListener("click", this.calenderCloser)
+
+      }
     }
     moveToNextPage(){
       this.setState({pageLevel: this.state.pageLevel+1});
@@ -195,40 +213,12 @@ class stuffList extends React.Component {
                   <p className="legend">{item.name}</p>
               </div>
     }
-    familyOptionChange(changeEvent) {
+    familyOptionChange(value) {
       this.setState({
-        includeFamily: changeEvent.target.value
+        includeFamily: value
       });
     }
     render() {
-      // return (
-      //       <Carousel showArrows={true} >
-      //           <div>
-      //               <img src="https://raw.githubusercontent.com/andyyou/react-coverflow/gh-pages/images/preview.png" />
-      //               <p className="legend">Legend 1</p>
-      //           </div>
-      //           <div>
-      //               <img src="https://raw.githubusercontent.com/andyyou/react-coverflow/gh-pages/images/preview.png" />
-      //               <p className="legend">Legend 2</p>
-      //           </div>
-      //           <div>
-      //               <img src="https://raw.githubusercontent.com/andyyou/react-coverflow/gh-pages/images/preview.png" />
-      //               <p className="legend">Legend 3</p>
-      //           </div>
-      //           <div>
-      //               <img src="https://raw.githubusercontent.com/andyyou/react-coverflow/gh-pages/images/preview.png" />
-      //               <p className="legend">Legend 4</p>
-      //           </div>
-      //           <div>
-      //               <img src="https://raw.githubusercontent.com/andyyou/react-coverflow/gh-pages/images/preview.png" />
-      //               <p className="legend">Legend 5</p>
-      //           </div>
-      //           <div>
-      //               <img src="https://raw.githubusercontent.com/andyyou/react-coverflow/gh-pages/images/preview.png" />
-      //               <p className="legend">Legend 6</p>
-      //           </div>
-      //       </Carousel>
-      //   );
         if(!this.props.stuff){
             return (
                 <div style={{marginTop: "18%", marginLeft: "50%"}}>
@@ -238,107 +228,52 @@ class stuffList extends React.Component {
         }else{
           let data = this.props.stuff._embedded ? this.props.stuff._embedded.events : [];
           let height = window.innerHeight - 100,
-              width = window.innerWidth/2 - 20,
+            fullHeight = window.innerHeight,
+            fullWidth = window.innerWidth - 20,
+            width = window.innerWidth/2 - 20,
              width1 = window.innerWidth/3,
              width2 = window.innerWidth - 120;
              let pageDiv = [];
 
           if(this.state.pageLevel === 0){
-           //  pageDiv.push(<div id="myCarousel" class="carousel slide" data-ride="carousel">
-           //     <ol class="carousel-indicators">
-           //       <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-           //       <li data-target="#myCarousel" data-slide-to="1"></li>
-           //     </ol>
-           //
-           //     <div class="carousel-inner" role="listbox">
-           //       <div class="item active">
-           //         <img src="https://placehold.it/1200x400?text=IMAGE" alt="Image"/>
-           //         <div class="carousel-caption">
-           //           <h3>Sell $</h3>
-           //           <p>Money Money.</p>
-           //         </div>
-           //       </div>
-           //
-           //       <div class="item">
-           //         <img src="https://placehold.it/1200x400?text=Another Image Maybe" alt="Image"/>
-           //         <div class="carousel-caption">
-           //           <h3>More Sell $</h3>
-           //           <p>Lorem ipsum...</p>
-           //         </div>
-           //       </div>
-           //     </div>
-           //
-           //     <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-           //       <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-           //       <span class="sr-only">Previous</span>
-           //     </a>
-           //     <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-           //       <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-           //       <span class="sr-only">Next</span>
-           //     </a>
-           // </div>)
-            pageDiv.push(<div className="container" style={{textAlign:"center"}}>
+            pageDiv.push(<div className="container" style={{textAlign:"center", height: fullHeight, width: fullWidth}}>
 
 
-                            <div className="col-md-8 col-md-offset-2" style={{backgroundColor:"#f9f9f9",padding:"10px",marginTop:"20px",paddingBottom:"40px"}}>
-                            <h3>Plan your day!</h3>
-
-                            <h4 style={{marginTop:"5px"}}>Who are you?</h4>
-
-
-
-
-                             {/* <label class="radio-inline">
-                       <input type="radio" name="optradio"/>Option 1
-                     </label>
-
-                     <label class="radio-inline">
-                       <input type="radio" name="optradio"/>Option 2
-                     </label>
-
-                     <label class="radio-inline">
-                       <input type="radio" name="optradio"/>Option 3
-                     </label> */}
-
-
-
-                              <label class="radio-inline">
-                                <input type="radio" value="0" checked={this.state.includeFamily == "0"}
-                                  onChange={this.familyOptionChange.bind(this)}
-                                />
-                                Friends
-                              </label>
-
-
-                              <label class="radio-inline">
-                                <input type="radio" value="1" checked={this.state.includeFamily == "1"}
-                                  onChange={this.familyOptionChange.bind(this)}
-                                />
-                                Family
-                              </label>
-
-
-                              <label class="radio-inline">
-                                <input type="radio" value="2" checked={this.state.includeFamily == "2"}
-                                  onChange={this.familyOptionChange.bind(this)}
-                                />
-                                Single
-                              </label>
-
-
-                              <label class="radio-inline">
-                                <input type="radio" value="3" checked={this.state.includeFamily == "3"}
-                                  onChange={this.familyOptionChange.bind(this)}
-                                />
-                                Couple
-                              </label>
-
+                        <div className="col-md-8 col-md-offset-2" style={{backgroundColor:"#f9f9f9",padding:"10px",marginTop:"20px",paddingBottom:"40px"}}>
+                        <h2 className="text-info">Plan your day!</h2>
+                        <h4 className="text-success" style={{marginTop:"5px"}}>Who are you?</h4>
+                        <div class="row">
+                          <div class="who-image col-xs-6 col-md-4" style={{cursor: "pointer"}} onClick={this.familyOptionChange.bind(this, "0")} >
+                              <img style={{border: (this.state.includeFamily =="0" ? "1px solid green" : "") }}  class="image img-circle"  src="friends.png" />
+                              <div class="middle">
+                                <div class="text">Friends</div>
+                              </div>
+                          </div>
+                          <div class="who-image col-xs-6 col-md-4" style={{cursor: "pointer"}} onClick={this.familyOptionChange.bind(this, "1")}>
+                              <img  style={{border: (this.state.includeFamily =="1" ? "1px solid green" : "") }} class="image img-circle"  src="family.png"  />
+                              <div class="middle">
+                                <div class="text">Family</div>
+                              </div>
+                          </div>
+                          <div class="who-image col-xs-6 col-md-4" style={{cursor: "pointer"}} onClick={this.familyOptionChange.bind(this, "2")}>
+                              <img  style={{border: (this.state.includeFamily =="2" ? "1px solid green" : "") }} class="image img-circle"   src="single.png"  />
+                              <div class="middle">
+                                <div class="text">Single</div>
+                              </div>
+                          </div>
+                          <div class="who-image col-xs-6 col-md-4" style={{cursor: "pointer"}} onClick={this.familyOptionChange.bind(this, "3")}>
+                              <img  style={{border: (this.state.includeFamily =="3" ? "1px solid green" : "") }} class="image img-circle"  src="couple.png"  />
+                              <div class="middle">
+                                <div class="text">Couple</div>
+                              </div>
+                        </div>
+                      </div>
                             </div>
                         </div>)
 
           }else if(this.state.pageLevel === 1){
             pageDiv.push(
-              <div>
+              <div style={{textAlign:"center", height: fullHeight, width: fullWidth, padding: "26px"}}>
                 <div>
                 <div>
                 {
@@ -392,24 +327,26 @@ class stuffList extends React.Component {
                     // }
                     // </div>
                   }
-                  {
-                  //    <div style={{height: "96%", overflow: "hidden",}}>
-                  //     <InfiniteCalendar
-                  //       Component={CalendarWithRange}
-                  //       selected={this.state.dates}
-                  //       locale={{
-                  //         headerFormat: 'MMM Do',
-                  //       }}
-                  //       onSelect={(d) => {this.setState({dates : {start: d.start, end: d.end}}); }}
-                  //     />
-                  // </div>
+                  <div className="btn btn-warning" style={{position: "absolute", top: "0px", left: "0px"}} onClick={this.calenderOpener}>Show Calender </div>
+                { this.state.calenderOpen &&
+                     <div className="calender-adder" style={{ height: "96%", overflow: "hidden",position: "absolute", top: "20px"}}>
+                     <div style={{opacity: "0.3",    backgroundColor: "black", top: "0px", left: "0px", position: "fixed",  backgroundCcolor: "black",opacity: "0.5", width: fullWidth, height: fullHeight}}></div>
+                      <InfiniteCalendar
+                        Component={CalendarWithRange}
+                        selected={this.state.dates}
+                        locale={{
+                          headerFormat: 'MMM Do',
+                        }}
+                        onSelect={(d) => {this.setState({dates : {start: d.start, end: d.end}}); }}
+                      />
+                  </div>
                 }
                 </div>
                 <div style={{left: width, position: "absolute", bottom: "10px"}} className="btn btn-primary" onClick={this.filterByDate}>Filter events</div>
               </div>
             )
           }else if(this.state.pageLevel === 2){
-            pageDiv.push(<div>
+            pageDiv.push(<div style={{textAlign:"center", height: fullHeight, width: fullWidth, padding: "26px"}}>
                         <div style={{textAlign: "center"}}><h2>want to mail saved event calender?</h2></div>
                         <div style={{flex:"1", height: height, overflow: "auto", margin: "5px"}}>{
                             Object.keys(this.state.savedEvents).length ? Object.keys(this.state.savedEvents).map((item, index) => {
